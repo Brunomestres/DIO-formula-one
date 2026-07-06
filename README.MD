@@ -1,81 +1,160 @@
-<div align="center">
+# Formula One API
 
-  <img src="./.github/assets/blue-saiyan-bg.png" alt="Logo" height="200">
-  <h1 align="center"><strong>NODE BOILERPLATE - BLUE EDITION</strong></h1>
-  <p align="center">
-	  Don't start a new Node project from zero!<br> Use this simple <b>Nodejs</b> boilerplate with pre-configured <b>Typescript</b> in a modern way.
-  </p>
+API simples em Node.js, TypeScript e Fastify para listar, buscar e cadastrar dados em memoria sobre equipes e pilotos de Formula 1.
 
-</div>
+## Tecnologias
 
-<br />
+- Node.js
+- TypeScript
+- Fastify
+- @fastify/cors
+- TSX
+- TSUP
 
-  <!-- Badges -->
-<div align="center">
-  
-  [![TypeScript version][ts-badge]][typescript-5-4]
-  [![Node.js version][nodejs-badge]][nodejs]
+## Como rodar
 
-</div>
-
-# 🚀 Technologies
-
-This code source was developed with the following items:
-
-### 📦 Dependencies
-
-- [typescript][typescript-npm] - Superset for application scale JavaScript development
-- [tsx][tsx-npm] - TypeScript Execute (tsx): Enable Node.js to run TypeScript
-- [tsup][tsup-npm] - Bundle your TypeScript library with no config, powered by esbuild
-- [@types/node][@types/node-npm] - type definitions for node
-
-### 📄 Files
-
-- `.gitignore` - Ignore folders like node_modules
-- `.env` - Enviroment variables
-- `tsconfig.json` - Typescript configure Options
-
-### ⚡ Scripts
-
-- `npm run dist`: Compiles TypeScript files to JavaScript in the dist directory.
-- `npm run start:dev`: Runs the server in development mode with environment variables loaded from the .env file.
-- `npm run start:watch`: Runs the server in development mode with support for automatic reload on file changes.
-- `npm run start:dist`: Compiles the project and runs the compiled version from the dist directory.
-
-# 👨‍💻 How To Use
-
-click in **[Use this template]** OR
-
-To clone and run this application, you'll need [Git](https://git-scm.com), [Node.js v20+](https://nodejs.org/en/) + [NPM v10+](https://nodejs.org/en/) installed on your computer. From your command line:
+Instale as dependencias:
 
 ```bash
-# Clone this repository
-$ git clone https://github.com/felipeAguiarCode/node-blue-boilerplate
-
-# Go into the repository
-$ cd node-blue-boilerplate
-
-# Install dependencies
-$ npm install
+npm install
 ```
 
-## Author
+Rode o servidor em modo desenvolvimento:
 
-| [<img src="https://avatars3.githubusercontent.com/u/37452836?s=96&v=4"><br><sub>Felipe Aguiar</sub>](https://github.com/felipeAguiarCode) |
-| :---------------------------------------------------------------------------------------------------------------------------------------: |
-|                                            [Linkedin](www.linkedin.com/in/felipe-aguiar-exe/)                                             |
+```bash
+npm run start:dev
+```
 
-# Credits
+O servidor roda em:
 
-icons by [Pino Lamanna][dribble-icon]
+```txt
+http://localhost:3333
+```
 
-[typescript]: https://www.typescriptlang.org/
-[typescript-5-4]: https://www.typescriptlang.org/
-[ts-badge]: https://img.shields.io/badge/TypeScript-5.4-blue.svg
-[nodejs-badge]: https://img.shields.io/badge/Node.js->=%2020.00-blue.svg
-[nodejs]: https://nodejs.org/
-[dribble-icon]: https://dribbble.com/Schakalwal
-[typescript-npm]: https://www.npmjs.com/package/typescript
-[tsx-npm]: https://www.npmjs.com/package/tsx
-[tsup-npm]: https://www.npmjs.com/package/tsup
-[@types/node-npm]: https://www.npmjs.com/package/@types/node
+## Scripts
+
+- `npm run start:dev`: inicia o servidor em modo desenvolvimento.
+- `npm run start:watch`: inicia o servidor com recarregamento automatico.
+- `npm run dist`: gera a build do projeto.
+- `npm run start:dist`: gera a build e executa a versao compilada.
+
+## Rotas
+
+### Health/base URL
+
+```txt
+http://localhost:3333
+```
+
+### Listar equipes
+
+```http
+GET /teams
+```
+
+Retorna 5 equipes cadastradas em memoria.
+
+Exemplo de resposta:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Ferrari",
+    "base": "Maranello, Italy"
+  }
+]
+```
+
+### Cadastrar equipe
+
+```http
+POST /teams
+```
+
+Body:
+
+```json
+{
+  "name": "Williams",
+  "base": "Grove, United Kingdom"
+}
+```
+
+Retorna a equipe criada com status `201`.
+
+### Listar pilotos
+
+```http
+GET /drivers
+```
+
+Retorna 5 pilotos cadastrados em memoria.
+
+Exemplo de resposta:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Charles Leclerc",
+    "team": "Ferrari",
+    "country": "Monaco"
+  }
+]
+```
+
+### Cadastrar piloto
+
+```http
+POST /drivers
+```
+
+Body:
+
+```json
+{
+  "name": "George Russell",
+  "team": "Mercedes",
+  "country": "United Kingdom"
+}
+```
+
+Retorna o piloto criado com status `201`.
+
+### Buscar piloto por ID
+
+```http
+GET /drivers/:id
+```
+
+Exemplo:
+
+```http
+GET /drivers/1
+```
+
+Caso o piloto exista, retorna os dados dele. Caso contrario, retorna `404`.
+
+Resposta quando nao encontra:
+
+```json
+{
+  "message": "Driver not found"
+}
+```
+
+## Observacoes
+
+- Os dados ficam apenas em memoria.
+- Ao reiniciar o servidor, novos cadastros feitos por `POST` sao perdidos.
+- O CORS esta liberado para qualquer origem.
+
+## Estrutura atual
+
+```txt
+src/
+  server.ts
+```
+
+O arquivo `src/server.ts` concentra a configuracao do Fastify, os dados em memoria e as rotas da API.
